@@ -875,10 +875,13 @@
 
 			zss_editor.init = function() {
 
+				disableLineBreakIfNecessary('zss_editor_title');
 				disableLineBreakIfNecessary('zss_editor_content');
 
+				setupTouchEndEnableEditing('zss_editor_title');
 				setupTouchEndEnableEditing('zss_editor_content');
 
+				clearHtmlIfTextIsEmpty('zss_editor_title');
 				clearHtmlIfTextIsEmpty('zss_editor_content');
 
 				$(document).on('selectionchange',function(e){
@@ -905,13 +908,13 @@
 					}
 				});
 
-
+				setupTouchEndFocus('zss_editor_title');
 				setupTouchEndFocus('zss_editor_content');
 
 				setCurrentEditingLinkOnTouch();
 				preventLinkFollowingOnTouch();
 
-
+				whenPastingInsertAsPlainText('zss_editor_title');
 				whenPastingInsertAsPlainText('zss_editor_content');
 
 				zss_editor.focusTitle();
@@ -1009,7 +1012,7 @@
 			}
 
 			zss_editor.setTitlePlaceholder = function(placeholder) {
-			//	setPlaceholder('zss_editor_title', placeholder);
+				setPlaceholder('zss_editor_title', placeholder);
 			}
 
 			zss_editor.setContentPlaceholder = function(placeholder) {
@@ -1365,12 +1368,12 @@
 			}
 
 			zss_editor.setTitleHTML = function(html) {
-			//	setHTML('zss_editor_title', html);
+				setHTML('zss_editor_title', html);
 			}
 
 			zss_editor.toggleTitle = function() {
-			//	$('#zss_editor_title').toggle();
-			//	$('#separatorContainer').toggle();
+				$('#zss_editor_title').toggle();
+				$('#separatorContainer').toggle();
 			}
 
 			zss_editor.enableOnChange = function() {
@@ -1383,13 +1386,13 @@
 			}
 
 			zss_editor.hideTitle = function() {
-			//	$('#zss_editor_title').hide();
-			//	$('#separatorContainer').hide();
+				$('#zss_editor_title').hide();
+				$('#separatorContainer').hide();
 			}
 
 			zss_editor.showTitle = function() {
-			//	$('#zss_editor_title').show();
-			//	$('#separatorContainer').show();
+				$('#zss_editor_title').show();
+				$('#separatorContainer').show();
 			}
 
 			zss_editor.setContentHTML = function(html) {
@@ -1438,7 +1441,7 @@
 			}
 
 			zss_editor.getTitleHTML = function() {
-			//	return getHtml("zss_editor_title");
+				return getHtml("zss_editor_title");
 			}
 
 			zss_editor.getContentHTML = function() {
@@ -1446,7 +1449,7 @@
 			}
 
 			zss_editor.getTitleText = function() {
-			//	return $('#zss_editor_title').text();
+				return $('#zss_editor_title').text();
 			}
 
 			zss_editor.getContentText = function() {
@@ -1573,7 +1576,7 @@
 			}
 
 			zss_editor.focusTitle = function() {
-			//	$('#zss_editor_title').focus();
+				$('#zss_editor_title').focus();
 			}
 
 			zss_editor.focusEditor = function(editorId) {
@@ -1592,7 +1595,7 @@
 
 
 			zss_editor.blurTitleEditor = function() {
-			//	$('#zss_editor_title').blur();
+				$('#zss_editor_title').blur();
 			}
 
 			zss_editor.blurContentEditor = function() {
@@ -1621,9 +1624,9 @@
 			}
 
 			zss_editor.setTitleFocusHandler = function() {
-			//	addFocusEvent('zss_editor_title', function() {
-			//		WebViewBridge.send(JSON.stringify({type: 'TITLE_FOCUSED'}))
-			//	});
+				addFocusEvent('zss_editor_title', function() {
+					WebViewBridge.send(JSON.stringify({type: 'TITLE_FOCUSED'}))
+				});
 			}
 
 			zss_editor.setContentFocusHandler = function() {
@@ -1699,6 +1702,18 @@
 				padding-right: 10px;
 			}
 
+			div.zss_editor_title {
+				font-family: 'Helvetica Neue Light', sans-serif;
+				font-size: 23px;
+				line-height: 31px;
+				color: #2d4150;
+			}
+
+			#zss_editor_title {
+                height: 0;
+				/*padding-left: 10px;
+				padding-right: 10px;*/
+			}
 
 			[placeholder]:empty:before {
 				content: attr(placeholder);
@@ -1716,6 +1731,12 @@
 				background-color: #e7e7e7;
 			}
 
+			#separatorContainer {
+                height: 0;
+			/*	-webkit-user-select: none;
+				padding-left: 10px;
+				padding-right: 10px;*/
+			}
 		</style>
 
 		<style type="text/css">
@@ -1726,6 +1747,9 @@
 
 	<body>
 		<!-- ZSSRichTextEditor Editable Content -->
+		<div id="zss_editor_title" class="zss_editor_title" contenteditable="true" placeholder="" disableLineBreaks="true"></div>
+		<div id="separatorContainer"></div>
 		<div id="zss_editor_content" class="zss_editor_content" contenteditable="true" placeholder=""></div>
+		<div id="zss_editor_footer"></div>
 	</body>
 </html>
